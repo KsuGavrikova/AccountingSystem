@@ -3,9 +3,11 @@
 
 # Log file
 *.log
+/log
 
 # Properties files
 *.properties
+/src/main/resources/
 
 # BlueJ files
 *.ctxt
