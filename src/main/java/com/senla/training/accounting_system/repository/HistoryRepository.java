@@ -1,6 +1,6 @@
-package com.senla.training.accountingSystem.repository;
+package com.senla.training.accounting_system.repository;
 
-import com.senla.training.accountingSystem.model.History;
+import com.senla.training.accounting_system.model.History;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

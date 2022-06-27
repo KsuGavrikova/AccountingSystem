@@ -1,4 +1,4 @@
-package com.senla.training.accountingSystem.model;
+package com.senla.training.accounting_system.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

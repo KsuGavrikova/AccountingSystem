@@ -1,9 +1,9 @@
-package com.senla.training.accountingSystem.mapper;
+package com.senla.training.accounting_system.mapper;
 
-import com.senla.training.accountingSystem.dto.AuthorNameDto;
-import com.senla.training.accountingSystem.dto.BookDto;
-import com.senla.training.accountingSystem.model.Author;
-import com.senla.training.accountingSystem.model.Book;
+import com.senla.training.accounting_system.dto.BookDto;
+import com.senla.training.accounting_system.dto.author.AuthorDto;
+import com.senla.training.accounting_system.model.Author;
+import com.senla.training.accounting_system.model.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -21,6 +21,6 @@ public interface BookMapper {
 
     List<BookDto> mapBooksToBooksDto(List<Book> books);
 
-    List<AuthorNameDto> map(List<Author> authors);
+    List<AuthorDto.AuthorNameDto> map(List<Author> authors);
 
 }

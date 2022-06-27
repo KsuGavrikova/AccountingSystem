@@ -1,10 +1,11 @@
-package com.senla.training.accountingSystem.service;
+package com.senla.training.accounting_system.service;
 
-import com.senla.training.accountingSystem.dto.AuthorDto;
+import com.senla.training.accounting_system.dto.author.AuthorDto;
 
 import java.util.List;
 
 public interface AuthorService {
     List<AuthorDto> getAll();
-    AuthorDto read(Long authorId);
+
+    AuthorDto getById(Long authorId);
 }

@@ -1,5 +1,6 @@
-package com.senla.training.accountingSystem.dto;
+package com.senla.training.accounting_system.dto;
 
+import com.senla.training.accounting_system.dto.author.AuthorDto;
 import lombok.Data;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public class BookDto {
 
     private CategoryDto category;
 
-    private List<AuthorNameDto> authors;
+    private List<AuthorDto.AuthorNameDto> authors;
 }

@@ -1,4 +1,4 @@
-package com.senla.training.accountingSystem.security.jwt;
+package com.senla.training.accounting_system.security.jwt;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;

@@ -1,6 +1,6 @@
-package com.senla.training.accountingSystem.service;
+package com.senla.training.accounting_system.service;
 
-import com.senla.training.accountingSystem.dto.RequestDto;
+import com.senla.training.accounting_system.dto.RequestDto;
 
 import java.util.List;
 

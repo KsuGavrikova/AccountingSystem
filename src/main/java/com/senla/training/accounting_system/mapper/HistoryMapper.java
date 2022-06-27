@@ -1,7 +1,7 @@
-package com.senla.training.accountingSystem.mapper;
+package com.senla.training.accounting_system.mapper;
 
-import com.senla.training.accountingSystem.dto.HistoryDto;
-import com.senla.training.accountingSystem.model.History;
+import com.senla.training.accounting_system.dto.HistoryDto;
+import com.senla.training.accounting_system.model.History;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;

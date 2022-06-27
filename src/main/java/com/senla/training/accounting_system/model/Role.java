@@ -1,6 +1,6 @@
-package com.senla.training.accountingSystem.model;
+package com.senla.training.accounting_system.model;
 
-import com.senla.training.accountingSystem.enums.Status;
+import com.senla.training.accounting_system.enums.Status;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -1,25 +1,25 @@
-package com.senla.training.accountingSystem.service.impl;
+package com.senla.training.accounting_system.service.impl;
 
-import com.senla.training.accountingSystem.dto.UserDto;
-import com.senla.training.accountingSystem.mapper.UserMapper;
+import com.senla.training.accounting_system.dto.user.UserDto;
+import com.senla.training.accounting_system.enums.Status;
+import com.senla.training.accounting_system.exeprion.NoEntityException;
+import com.senla.training.accounting_system.mapper.UserMapper;
+import com.senla.training.accounting_system.model.Role;
+import com.senla.training.accounting_system.model.User;
+import com.senla.training.accounting_system.repository.RoleRepository;
+import com.senla.training.accounting_system.repository.UserRepository;
+import com.senla.training.accounting_system.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.senla.training.accountingSystem.model.Role;
-import com.senla.training.accountingSystem.enums.Status;
-import com.senla.training.accountingSystem.model.User;
-import com.senla.training.accountingSystem.repository.RoleRepository;
-import com.senla.training.accountingSystem.repository.UserRepository;
-import com.senla.training.accountingSystem.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 @Slf4j
 @AllArgsConstructor
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -60,13 +60,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        User result = userRepository.findById(id).orElse(null);
-
-        if (result == null) {
-            log.warn("IN findById - no user found by id: {}", id);
-            return null;
-        }
-
+        User result = userRepository.findById(id)
+                .orElseThrow(() -> new NoEntityException("User with id ", id));
         log.info("IN findById - user: {} found by id: {}", result);
         return result;
     }
@@ -74,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
-        log.info("IN delete - user with id: {} successfully deleted");
+        log.info("IN delete - user with id: {} successfully deleted", id);
     }
 
     @Override
@@ -83,7 +78,8 @@ public class UserServiceImpl implements UserService {
             User user = userMapper.dtoToEntity(userDto);
             return userMapper.entityToDto(userRepository.save(user));
         } else {
-            throw new EntityNotFoundException();
+            log.error("User {} not found", userDto);
+            throw new NoEntityException();
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.senla.training.accounting_system.dto;
+package com.senla.training.accounting_system.dto.user;
 
 import lombok.Data;
 

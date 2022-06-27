@@ -1,4 +1,4 @@
-package com.senla.training.accountingSystem.security.jwt;
+package com.senla.training.accounting_system.security.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,8 @@ public class JwtUser implements UserDetails {
             String firstName,
             String lastName,
             String email,
-            String password, Collection<? extends GrantedAuthority> authorities,
+            String password,
+            Collection<? extends GrantedAuthority> authorities,
             boolean enabled
     ) {
         this.id = id;
@@ -95,8 +96,4 @@ public class JwtUser implements UserDetails {
         return enabled;
     }
 
-    // @JsonIgnore
-    //  public Date getLastPasswordResetDate() {
-    //     return lastPasswordResetDate;
-    // }
 }

@@ -1,7 +1,7 @@
-package com.senla.training.accountingSystem.mapper;
+package com.senla.training.accounting_system.mapper;
 
-import com.senla.training.accountingSystem.dto.CategoryDto;
-import com.senla.training.accountingSystem.model.Category;
+import com.senla.training.accounting_system.dto.CategoryDto;
+import com.senla.training.accounting_system.model.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -9,7 +9,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         componentModel = "spring")
-public interface  CategoryMapper {
+public interface CategoryMapper {
     CategoryDto entityToDto(Category entity);
 
     Category dtoToEntity(CategoryDto dto);

@@ -1,7 +1,7 @@
-package com.senla.training.accountingSystem.service;
+package com.senla.training.accounting_system.service;
 
-import com.senla.training.accountingSystem.dto.UserDto;
-import com.senla.training.accountingSystem.model.User;
+import com.senla.training.accounting_system.dto.user.UserDto;
+import com.senla.training.accounting_system.model.User;
 
 import java.util.List;
 

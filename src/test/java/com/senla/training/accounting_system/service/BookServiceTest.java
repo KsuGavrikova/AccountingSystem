@@ -1,4 +1,4 @@
-package com.senla.training.accounting_system;
+package com.senla.training.accounting_system.service;
 
 import com.senla.training.accounting_system.dto.BookDto;
 import com.senla.training.accounting_system.mapper.BookMapper;

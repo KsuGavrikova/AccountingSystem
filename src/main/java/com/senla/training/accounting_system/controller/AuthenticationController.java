@@ -1,13 +1,14 @@
-package com.senla.training.accountingSystem.controller;
+package com.senla.training.accounting_system.controller;
 
-import com.senla.training.accountingSystem.dto.AuthenticationRequestDto;
-import com.senla.training.accountingSystem.dto.RegistrationUserDto;
-import com.senla.training.accountingSystem.model.User;
-import com.senla.training.accountingSystem.security.jwt.JwtTokenProvider;
-import com.senla.training.accountingSystem.service.UserService;
+import com.senla.training.accounting_system.dto.user.AuthenticationRequestDto;
+import com.senla.training.accounting_system.dto.user.LoginTokenDto;
+import com.senla.training.accounting_system.dto.user.RegistrationUserDto;
+import com.senla.training.accounting_system.mapper.RegistrationUserMapper;
+import com.senla.training.accounting_system.model.User;
+import com.senla.training.accounting_system.security.jwt.JwtTokenProvider;
+import com.senla.training.accounting_system.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,67 +20,55 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@RestController
-@AllArgsConstructor
 @Slf4j
+@AllArgsConstructor
 @RequestMapping(value = "/auth/")
+@RestController
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
-
     private final JwtTokenProvider jwtTokenProvider;
-
+    private final RegistrationUserMapper registrationUserMapper;
     private final UserService userService;
 
 
     @PostMapping("login")
-    public ResponseEntity<Map<Object, Object>> login(@RequestBody AuthenticationRequestDto requestDto) {
+    public ResponseEntity<LoginTokenDto> login(@RequestBody AuthenticationRequestDto requestDto) {
         try {
             String username = requestDto.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
             User user = userService.findByUsername(username);
 
             if (user == null) {
+                log.error("IN login - User with username: " + username + " not found");
                 throw new UsernameNotFoundException("User with username: " + username + " not found");
             }
 
             String token = jwtTokenProvider.createToken(username, user.getRoles());
+            log.info("IN login - token was create");
+            LoginTokenDto loginTokenDto = new LoginTokenDto();
+            loginTokenDto.setUsername(username);
+            loginTokenDto.setToken(token);
 
-            Map<Object, Object> response = new HashMap<>();
-            response.put("username", username);
-            response.put("token", token);
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(loginTokenDto);
         } catch (AuthenticationException e) {
+            log.error("IN login - Invalid username or password");
             throw new BadCredentialsException("Invalid username or password");
         }
     }
 
     @PostMapping("registration")
-    public ResponseEntity registration(@RequestBody RegistrationUserDto registrationUserDto) {
-        try {
-            String username = registrationUserDto.getUsername();
-            if (userService.findByUsername(username) != null) {
-                log.info("User with name " + username + " is empty");
-                return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-            }
-
-            User user = new User();
-            user.setUsername(registrationUserDto.getUsername());
-            user.setFirstName(registrationUserDto.getFirstName());
-            user.setLastName(registrationUserDto.getLastName());
-            user.setEmail(registrationUserDto.getEmail());
-            user.setPassword(registrationUserDto.getPassword());
-            User userReg = userService.register(user);
-            registrationUserDto.setPassword(userReg.getPassword());
-
-            return ResponseEntity.ok(registrationUserDto);
-
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username or password");
+    public ResponseEntity<String> registration(@RequestBody RegistrationUserDto registrationUserDto) {
+        String username = registrationUserDto.getUsername();
+        if (userService.findByUsername(username) != null) {
+            log.info("IN registration - User with name " + username + " already exists");
+            return ResponseEntity.badRequest().body(" User with name " + username + " already exists ");
         }
+        User userReg = userService.register(registrationUserMapper.dtoToEntity(registrationUserDto));
+        registrationUserDto.setPassword(userReg.getPassword());
+
+        log.info("IN registration -User was registration");
+        return ResponseEntity.ok(registrationUserDto.getUsername());
+
     }
 }

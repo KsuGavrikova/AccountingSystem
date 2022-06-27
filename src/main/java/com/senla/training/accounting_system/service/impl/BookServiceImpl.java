@@ -1,35 +1,45 @@
-package com.senla.training.accountingSystem.service.impl;
+package com.senla.training.accounting_system.service.impl;
 
-import com.senla.training.accountingSystem.dto.BookDto;
-import com.senla.training.accountingSystem.mapper.BookMapper;
-import com.senla.training.accountingSystem.model.Book;
-import com.senla.training.accountingSystem.model.Category;
-import com.senla.training.accountingSystem.repository.BookRepository;
-import com.senla.training.accountingSystem.repository.CategoryRepository;
-import com.senla.training.accountingSystem.service.BookService;
+import com.senla.training.accounting_system.dto.BookDto;
+import com.senla.training.accounting_system.exeprion.NoEntityException;
+import com.senla.training.accounting_system.exeprion.RepositoryException;
+import com.senla.training.accounting_system.mapper.BookMapper;
+import com.senla.training.accounting_system.model.Book;
+import com.senla.training.accounting_system.model.Category;
+import com.senla.training.accounting_system.repository.BookRepository;
+import com.senla.training.accounting_system.repository.CategoryRepository;
+import com.senla.training.accounting_system.service.BookService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
 
-    BookRepository bookRepository;
-    CategoryRepository categoryRepository;
-
-    BookMapper bookMapper;
+    private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
+    private final BookMapper bookMapper;
 
     @Override
     public List<BookDto> getAll() {
-        List<Book> books = bookRepository.findAll();
+        List<Book> books;
+        try {
+            books = bookRepository.findAll();
+            log.info("IN getAll -  Books was found");
+        } catch (Exception e) {
+            log.error("IN getAll - Books Repository Exception");
+            throw new RepositoryException("IN getAll - Books Repository Exception" + e);
+        }
         if (books.isEmpty()) {
+            log.info("IN getAll - Books is empty");
             return new ArrayList<>();
         }
         return books.stream()
@@ -39,7 +49,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto getBookById(Long bookId) {
-        Book book = bookRepository.findById(bookId).orElseThrow(EntityNotFoundException::new);
+        Book book;
+        try {
+            book = bookRepository.getById(bookId);
+        } catch (Exception e) {
+            log.error("IN getBookById -  Repository Exception");
+            throw new RepositoryException("IN getBookById - " + e);
+        }
         return bookMapper.entityToDto(book);
     }
 
@@ -53,16 +69,19 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto update(BookDto bookDto) {
         if (bookRepository.existsById(bookDto.getId())) {
+            log.info("IN update - Book for update was found");
             Book book = bookMapper.dtoToEntity(bookDto);
             return bookMapper.entityToDto(bookRepository.save(book));
         } else {
-            throw new EntityNotFoundException();
+            log.info("IN update - Book for update not found" + bookDto);
+            throw new NoEntityException();
         }
     }
 
     @Override
     public void delete(Long bookId) {
         bookRepository.deleteById(bookId);
+        log.info("IN delete - Book with id {} was delete", bookId);
     }
 
     @Override
@@ -82,13 +101,13 @@ public class BookServiceImpl implements BookService {
         return listBooks;
     }
 
-    private  void getAllChildCategory(List<Category> categoryList, Set<Category> childCategories) {
+    private void getAllChildCategory(List<Category> categoryList, Set<Category> childCategories) {
         boolean flag = true;
         while (flag) {
             flag = false;
             for (Category category : categoryList) {
                 for (Category child : childCategories) {
-                    if (category.getParentId() == child.getId() && !childCategories.contains(category)) {
+                    if (category.getParentId().equals(child.getId()) && !childCategories.contains(category)) {
                         childCategories.add(category);
                         flag = true;
                     }

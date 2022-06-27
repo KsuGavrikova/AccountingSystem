@@ -1,10 +1,10 @@
-package com.senla.training.accountingSystem.security;
+package com.senla.training.accounting_system.security;
 
+import com.senla.training.accounting_system.model.User;
+import com.senla.training.accounting_system.security.jwt.JwtUser;
+import com.senla.training.accounting_system.security.jwt.JwtUserFactory;
+import com.senla.training.accounting_system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import com.senla.training.accountingSystem.model.User;
-import com.senla.training.accountingSystem.security.jwt.JwtUser;
-import com.senla.training.accountingSystem.security.jwt.JwtUserFactory;
-import com.senla.training.accountingSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

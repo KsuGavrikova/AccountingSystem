@@ -1,4 +1,4 @@
-package com.senla.training.accountingSystem.enums;
+package com.senla.training.accounting_system.enums;
 
 public enum Status {
     ACTIVE, NOT_ACTIVE, DELETED

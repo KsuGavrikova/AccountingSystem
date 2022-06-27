@@ -1,41 +1,39 @@
-package com.senla.training.accountingSystem.controller;
+package com.senla.training.accounting_system.controller;
 
-import com.senla.training.accountingSystem.dto.AdminUserDto;
-import com.senla.training.accountingSystem.dto.UserDto;
-import com.senla.training.accountingSystem.model.User;
-import com.senla.training.accountingSystem.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.senla.training.accounting_system.dto.user.AdminUserDto;
+import com.senla.training.accounting_system.dto.user.UserDto;
+import com.senla.training.accounting_system.mapper.AdminUserMapper;
+import com.senla.training.accounting_system.model.User;
+import com.senla.training.accounting_system.service.UserService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = "/admin/")
 public class AdminController {
 
     private final UserService userService;
-
-    @Autowired
-    public AdminController(UserService userService) {
-        this.userService = userService;
-    }
+    private final AdminUserMapper adminUserMapper;
 
     @GetMapping(value = "users/{id}")
     public ResponseEntity<AdminUserDto> getUserById(@PathVariable(name = "id") Long id) {
         User user = userService.findById(id);
-
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
-        AdminUserDto result = AdminUserDto.fromUser(user);
-
+        AdminUserDto result = adminUserMapper.entityToDto(user);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PutMapping("users/{id}")
-    public UserDto updateBook(@PathVariable Long id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateBook(@PathVariable Long id, @RequestBody UserDto userDto) {
         userDto.setId(id);
-        return userService.update(userDto);
+        UserDto updateBook = userService.update(userDto);
+        return new ResponseEntity<>(updateBook, HttpStatus.OK);
     }
 }
