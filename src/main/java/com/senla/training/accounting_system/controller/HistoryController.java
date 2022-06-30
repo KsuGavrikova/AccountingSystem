@@ -21,16 +21,19 @@ public class HistoryController {
 
     private final HistoryService historyService;
 
+    //TODO добавить пагинацию?
     @GetMapping()
     public ResponseEntity<List<HistoryDto>> findAll() {
         return ResponseEntity.ok(historyService.getAll());
     }
 
+    //TODO добавить пагинацию?
     @GetMapping("/rent")
     public ResponseEntity<List<HistoryDto>> findRent() {
         return ResponseEntity.ok(historyService.getRent());
     }
 
+    //TODO добавить пагинацию?
     @GetMapping("/overdue")
     public ResponseEntity<List<HistoryDto>> findOverdue() {
         return ResponseEntity.ok(historyService.getOverdue());

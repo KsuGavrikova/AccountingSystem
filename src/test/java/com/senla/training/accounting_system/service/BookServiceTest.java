@@ -12,6 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +62,7 @@ class BookServiceTest {
         book1.setName("book1");
         book1.setPublicationYear(2022);
         book1.setCategory(category);
-        //    book1.setAuthors(new ArrayList<>());
+        book1.setAuthors(new ArrayList<>());
         book2 = new Book();
         book2.setId(id2);
         books = new ArrayList<>();
@@ -67,28 +71,29 @@ class BookServiceTest {
     }
 
     @Test
-    void getAll() {
+    void testGetAll() {
         // given
-        when(bookRepository.findAll()).thenReturn(books);
+        Page<Book> page = new PageImpl<>(books);
+        when(bookRepository.findAll(PageRequest.of(0, 2, Sort.by("Id")))).thenReturn(page);
         when(bookMapper.entityToDto(book1)).thenReturn(bookDto1);
         when(bookMapper.entityToDto(book2)).thenReturn(bookDto2);
         // when
-        List<BookDto> result = bookService.getAll();
+        List<BookDto> result = bookService.getAll(0, 2, "Id");
         // then
-        verify(bookRepository, times(1)).findAll();
+        verify(bookRepository, times(1)).findAll(PageRequest.of(0, 2, Sort.by("Id")));
         assertNotNull(result);
         assertEquals(id1, result.get(0).getId());
         assertEquals(id2, result.get(1).getId());
     }
 
     @Test
-    void getAllEmpty() {
+    void testGetAllEmpty() {
         // given
-        when(bookRepository.findAll()).thenReturn(new ArrayList<>());
+        when(bookRepository.findAll(PageRequest.of(0, 1, Sort.by("Id")))).thenReturn(Page.empty());
         // when
-        List<BookDto> result = bookService.getAll();
+        List<BookDto> result = bookService.getAll(0, 1, "Id");
         // then
-        verify(bookRepository, times(1)).findAll();
+        verify(bookRepository, times(1)).findAll(PageRequest.of(0, 1, Sort.by("Id")));
         assertNotNull(result);
         assertEquals(new ArrayList<>(), result);
     }
@@ -147,11 +152,9 @@ class BookServiceTest {
 
     @Test
     void testDelete() {
-        // given
         // when
         bookService.delete(id1);
         // then
         verify(bookRepository, times(1)).deleteById(id1);
     }
-
 }

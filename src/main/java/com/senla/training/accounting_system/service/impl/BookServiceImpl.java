@@ -11,6 +11,10 @@ import com.senla.training.accounting_system.repository.CategoryRepository;
 import com.senla.training.accounting_system.service.BookService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,10 +33,11 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
 
     @Override
-    public List<BookDto> getAll() {
-        List<Book> books;
+    public List<BookDto> getAll(Integer pageNo, Integer pageSize, String sortBy) {
+        Page<Book> books;
         try {
-            books = bookRepository.findAll();
+            Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+            books = bookRepository.findAll(paging);
             log.info("IN getAll -  Books was found");
         } catch (Exception e) {
             log.error("IN getAll - Books Repository Exception");
@@ -42,7 +47,7 @@ public class BookServiceImpl implements BookService {
             log.info("IN getAll - Books is empty");
             return new ArrayList<>();
         }
-        return books.stream()
+        return books.getContent().stream()
                 .map(bookMapper::entityToDto)
                 .collect(Collectors.toList());
     }
@@ -61,7 +66,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto create(BookDto bookDto) {
-        //validate метод для проверки всех полей бук
+        //TODO validate метод для проверки всех полей бук
         Book book = bookMapper.dtoToEntity(bookDto);
         return bookMapper.entityToDto(bookRepository.save(book));
     }
@@ -95,7 +100,8 @@ public class BookServiceImpl implements BookService {
             childCategories.add(categoryRepository.getById(categoryId));
             getAllChildCategory(categoryList, childCategories);
             for (Category childCat : childCategories) {
-                listBooks.addAll(bookMapper.mapBooksToBooksDto(bookRepository.findAllByCategoryId(childCat.getId())));
+                listBooks.addAll(bookMapper.mapBooksToBooksDto(
+                        bookRepository.findAllByCategoryId(childCat.getId())));
             }
         }
         return listBooks;

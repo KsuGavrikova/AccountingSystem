@@ -22,8 +22,10 @@ public class BookController {
     private final RequestService requestService;
 
     @GetMapping()
-    public ResponseEntity<List<BookDto>> findAll() {
-        return ResponseEntity.ok(bookService.getAll());
+    public ResponseEntity<List<BookDto>> findAll(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                 @RequestParam(defaultValue = "10") Integer pageSize,
+                                                 @RequestParam(defaultValue = "id") String sortBy) {
+        return ResponseEntity.ok(bookService.getAll(pageNo, pageSize, sortBy));
     }
 
     @GetMapping("/{id}")
@@ -47,6 +49,7 @@ public class BookController {
         return ResponseEntity.ok(bookService.update(bookDto));
     }
 
+    //TODO добавить пагинацию?
     @GetMapping("/{id}/requests")
     public ResponseEntity<List<RequestDto>> history(@PathVariable("id") Long id) {
         BookDto result = bookService.getBookById(id);
@@ -55,6 +58,7 @@ public class BookController {
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    //TODO добавить пагинацию?
     @GetMapping("/catalog/{idCategory}")
     public ResponseEntity<List<BookDto>> getBooksByCategory(@PathVariable("idCategory") Long id) {
         return ResponseEntity.ok(bookService.getBooksByCategory(id));
