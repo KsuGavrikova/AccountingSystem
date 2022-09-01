@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
+@RestController
 @AllArgsConstructor
 @RequestMapping(value = "/auth/")
-@RestController
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;

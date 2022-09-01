@@ -19,8 +19,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class HistoryServiceImpl implements HistoryService {
     private final HistoryRepository historyRepository;
     private final HistoryMapper historyMapper;

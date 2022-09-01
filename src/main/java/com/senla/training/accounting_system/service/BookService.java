@@ -5,6 +5,7 @@ import com.senla.training.accounting_system.dto.BookDto;
 import java.util.List;
 
 public interface BookService {
+
     List<BookDto> getAll(Integer pageNo, Integer pageSize, String sortBy);
 
     BookDto getBookById(Long bookId);

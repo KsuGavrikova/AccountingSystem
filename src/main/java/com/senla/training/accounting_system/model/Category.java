@@ -1,14 +1,15 @@
 package com.senla.training.accounting_system.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "categoies")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "categoies")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

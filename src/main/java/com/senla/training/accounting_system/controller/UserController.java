@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Positive;
+
 @Slf4j
+@RestController
 @AllArgsConstructor
 @RequestMapping(value = "/users/")
-@RestController
 public class UserController {
 
     private final UserService userService;
@@ -24,7 +26,7 @@ public class UserController {
     private UserMapper userMapper;
 
     @GetMapping(value = "{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable(name = "id") @Positive Long id) {
         User user = userService.findById(id);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

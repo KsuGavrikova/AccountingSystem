@@ -14,31 +14,32 @@ import java.util.List;
 import java.util.Set;
 
 @Slf4j
+@RestController
 @AllArgsConstructor
 @RequestMapping("/history")
-@RestController
 public class HistoryController {
 
     private final HistoryService historyService;
 
-    //TODO добавить пагинацию?
+    //TODO добавить пагинацию
     @GetMapping()
     public ResponseEntity<List<HistoryDto>> findAll() {
         return ResponseEntity.ok(historyService.getAll());
     }
 
-    //TODO добавить пагинацию?
+    //TODO добавить пагинацию
     @GetMapping("/rent")
     public ResponseEntity<List<HistoryDto>> findRent() {
         return ResponseEntity.ok(historyService.getRent());
     }
 
-    //TODO добавить пагинацию?
+    //TODO добавить пагинацию
     @GetMapping("/overdue")
     public ResponseEntity<List<HistoryDto>> findOverdue() {
         return ResponseEntity.ok(historyService.getOverdue());
     }
 
+    //TODO добавить пагинацию
     @GetMapping("/wasReturn")
     public ResponseEntity<Set<BookDto>> findWasReturn() {
         return ResponseEntity.ok(historyService.getWasReturn());

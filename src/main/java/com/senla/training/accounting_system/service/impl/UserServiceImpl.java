@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;

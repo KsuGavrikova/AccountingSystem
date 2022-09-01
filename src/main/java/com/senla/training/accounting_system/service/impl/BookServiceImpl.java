@@ -24,8 +24,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
@@ -34,7 +34,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getAll(Integer pageNo, Integer pageSize, String sortBy) {
-        Page<Book> books;
+        Page<Book> books = null;
         try {
             Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
             books = bookRepository.findAll(paging);
